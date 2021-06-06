@@ -6,4 +6,5 @@ interface Connection extends \IteratorAggregate
 {
     public function pageInfo(): PageInfo;
 
+    public function getIterator(): Edges;
 }
