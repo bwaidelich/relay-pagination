@@ -11,7 +11,21 @@ abstract class AbstractPaginatorTest extends TestCase
 {
     protected ?Loader $loader;
 
-    abstract protected function renderEdge(Edge $edge): string;
+    abstract protected function renderNode($node): string;
+
+    public function test_first_throws_exception_if_numberOfRecords_is_negative(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $paginator = new Paginator($this->loader);
+        $paginator->first(-5);
+    }
+
+    public function test_last_throws_exception_if_numberOfRecords_is_negative(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $paginator = new Paginator($this->loader);
+        $paginator->last(-5);
+    }
 
     public function test_forward_pagination(): void
     {

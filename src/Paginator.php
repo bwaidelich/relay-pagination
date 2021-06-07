@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Wwwision\RelayPagination;
 
+use Webmozart\Assert\Assert;
 use Wwwision\RelayPagination\Connection\Connection;
 use Wwwision\RelayPagination\Connection\PageInfo;
 use Wwwision\RelayPagination\Loader\Loader;
@@ -49,6 +50,7 @@ final class Paginator
 
     public function first(int $numberOfRecords, string $after = null): Connection
     {
+        Assert::positiveInteger($numberOfRecords, 'numberOfRecords must be a positive integer');
         if ($this->reverse) {
             return $this->backwardConnection($numberOfRecords, $after, true);
         }
@@ -57,6 +59,7 @@ final class Paginator
 
     public function last(int $numberOfRecords, string $before = null): Connection
     {
+        Assert::positiveInteger($numberOfRecords, 'numberOfRecords must be a positive integer');
         if ($this->reverse) {
             return $this->forwardConnection($numberOfRecords, $before, true);
         }
