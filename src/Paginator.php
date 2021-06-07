@@ -26,16 +26,25 @@ use Wwwision\RelayPagination\Loader\Loader;
 final class Paginator
 {
     private Loader $loader;
-    private bool $reverse;
+    private bool $reverse = false;
+    private ?\Closure $nodeConverter = null;
 
     /**
      * @param Loader $loader The loader implementation that is responsible for fetching results from arbitrary data sources
-     * @param bool $reverse If true the order of all edges is reversed (abc.def => fed.cba). This allows to paginate through results in descending order
      */
-    public function __construct(Loader $loader, bool $reverse = false)
+    public function __construct(Loader $loader)
     {
         $this->loader = $loader;
-        $this->reverse = $reverse;
+    }
+
+    /**
+     * Reverse the ordering of results (sort edges in descending order)
+     */
+    public function reversed(): self
+    {
+        $newInstance = clone $this;
+        $newInstance->reverse = true;
+        return $newInstance;
     }
 
     public function first(int $numberOfRecords, string $after = null): Connection

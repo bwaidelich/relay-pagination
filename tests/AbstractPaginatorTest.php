@@ -36,7 +36,7 @@ abstract class AbstractPaginatorTest extends TestCase
         $nodesPerPage = 3;
         $after = null;
         $actualResult = '';
-        $paginator = new Paginator($this->loader, true);
+        $paginator = (new Paginator($this->loader))->reversed();
         do {
             $connection = $paginator->first($nodesPerPage, $after);
             foreach ($connection as $edge) {
@@ -83,7 +83,7 @@ abstract class AbstractPaginatorTest extends TestCase
         $nodesPerPage = 3;
         $before = null;
         $actualResult = '';
-        $paginator = new Paginator($this->loader, true);
+        $paginator = (new Paginator($this->loader))->reversed();
         do {
             $connection = $paginator->last($nodesPerPage, $before);
             foreach ($connection as $edge) {

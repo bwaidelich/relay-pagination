@@ -51,11 +51,11 @@ if ($secondPage->pageInfo()->hasPreviousPage()) {
 ### Reversed order
 
 The ordering of edges is the same whether forward or backward navigation is used (as defined in the [specification](https://relay.dev/graphql/connections.htm#sec-Edge-order)).
-To navigate through results in _reversed_ order, the `reverse` parameter of the `Paginator` constructor can be specified:
+To navigate through results in _reversed_ order, the `reversed()` method of the `Paginator` can be used:
 
 ```php
 $loader = new ArrayLoader(range('a', 'e'));
-$paginator = new Paginator($loader, true);
+$paginator = (new Paginator($loader))->reversed();
 
 $page1 = $paginator->first(3);
 
