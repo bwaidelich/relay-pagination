@@ -19,36 +19,22 @@ final class ArrayLoader implements Loader
         $this->array = array_values($array);
     }
 
-    public function forward(int $limit, string $startCursor = null): Edges
+    public function first(int $limit, string $startCursor = null): Edges
     {
-        $offset = $this->extractOffsetFromCursor($startCursor);
-        return Edges::fromRawArray(
-            $this->base64encodeArrayKeys(
-                \array_slice($this->array, $offset, $limit, true)
-            )
-        );
-    }
-
-    public function backward(int $limit, string $endCursor = null): Edges
-    {
-        $offset = $this->extractOffsetFromCursor($endCursor);
-        return Edges::fromRawArray(
-            $this->base64encodeArrayKeys(
-                \array_slice(\array_reverse($this->array, true), -$offset - 1, $limit, true)
-            )
-        );
-    }
-
-    private function extractOffsetFromCursor(string $cursor = null): int
-    {
-        if ($cursor === null) {
-            return 0;
+        if ($startCursor !== null && !is_numeric($startCursor)) {
+            throw new \InvalidArgumentException(sprintf('Invalid cursor "%s", only numeric cursors are supported by the ArrayLoader', $startCursor), 1622981129);
         }
-        return (int)base64_decode($cursor);
+        $offset = $startCursor !== null ? (int)$startCursor : 0;
+        return Edges::fromRawArray(\array_slice($this->array, $offset, $limit, true));
     }
 
-    private function base64encodeArrayKeys(array $array): array
+    public function last(int $limit, string $endCursor = null): Edges
     {
-        return array_merge(...array_map(static fn($key, $value) => [base64_encode((string)$key) => $value], array_keys($array), $array));
+        if ($endCursor !== null && !is_numeric($endCursor)) {
+            throw new \InvalidArgumentException(sprintf('Invalid cursor "%s", only numeric cursors are supported by the ArrayLoader', $endCursor), 1622984163);
+        }
+        $offset = $endCursor !== null ? max(0, min((int)$endCursor, \count($this->array) - 1) - $limit + 1) : -$limit;
+        $length = $endCursor !== null ? min($limit, (int)$endCursor + 1) : $limit;
+        return Edges::fromRawArray(\array_slice($this->array, $offset, $length, true));
     }
 }

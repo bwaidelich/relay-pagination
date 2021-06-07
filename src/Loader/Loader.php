@@ -6,6 +6,6 @@ use Wwwision\RelayPagination\Connection\Edges;
 
 interface Loader
 {
-    public function forward(int $limit, string $startCursor = null): Edges;
-    public function backward(int $limit, string $endCursor = null): Edges;
+    public function first(int $limit, string $startCursor = null): Edges;
+    public function last(int $limit, string $endCursor = null): Edges;
 }

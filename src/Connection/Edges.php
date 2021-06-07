@@ -13,10 +13,12 @@ final class Edges implements \IteratorAggregate, \Countable
 
     private function __construct(array $edges)
     {
-        if ($edges === []) {
-            throw new \InvalidArgumentException('Empty edges', 1622912524);
-        }
         $this->edges = $edges;
+    }
+
+    public static function empty(): self
+    {
+        return new self([]);
     }
 
     public static function fromArray(array $edges): self
@@ -45,9 +47,19 @@ final class Edges implements \IteratorAggregate, \Countable
         return new self(\array_slice($this->edges, 1));
     }
 
-    public function slice(int $length): self
+    public function isEmpty(): bool
     {
-        return new self(\array_slice($this->edges, 0, $length));
+        return $this->edges === [];
+    }
+
+    public function slice(int $offset, int $length): self
+    {
+        return new self(\array_slice($this->edges, $offset, $length));
+    }
+
+    public function map(callable $callback): array
+    {
+        return array_map($callback, $this->edges);
     }
 
     public function skipLast(): self
@@ -77,6 +89,6 @@ final class Edges implements \IteratorAggregate, \Countable
 
     public function count(): int
     {
-        return count($this->edges);
+        return \count($this->edges);
     }
 }

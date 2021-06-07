@@ -28,12 +28,12 @@ final class CallbackLoader implements Loader
         $this->backwardCallback = $backwardCallback;
     }
 
-    public function forward(int $limit, string $startCursor = null): Edges
+    public function first(int $limit, string $startCursor = null): Edges
     {
         return \call_user_func($this->forwardCallback, $limit, $startCursor);
     }
 
-    public function backward(int $limit, string $endCursor = null): Edges
+    public function last(int $limit, string $endCursor = null): Edges
     {
         return \call_user_func($this->backwardCallback, $limit, $endCursor);
     }

@@ -28,32 +28,27 @@ final class DbalLoader implements Loader
         $this->cursorField = $cursorField;
     }
 
-    public function forward(int $limit, string $startCursor = null): Edges
+    public function first(int $limit, string $startCursor = null): Edges
     {
         $queryBuilder = clone $this->queryBuilder;
         $queryBuilder
             ->orderBy($this->cursorField, 'ASC')
             ->setMaxResults($limit);
         if ($startCursor !== null) {
-            $queryBuilder = $queryBuilder->andWhere("$this->cursorField >= $startCursor");
+            $queryBuilder = $queryBuilder->andWhere("$this->cursorField >= :startCursor")->setParameter('startCursor', $startCursor);
         }
-        return $this->fetch($queryBuilder);
+        return Edges::fromRawArray($queryBuilder->execute()->fetchAllAssociative(), $this->cursorField);
     }
 
-    public function backward(int $limit, string $endCursor = null): Edges
+    public function last(int $limit, string $endCursor = null): Edges
     {
         $queryBuilder = clone $this->queryBuilder;
         $queryBuilder
             ->orderBy($this->cursorField, 'DESC')
             ->setMaxResults($limit);
         if ($endCursor !== null) {
-            $queryBuilder = $queryBuilder->andWhere("$this->cursorField <= $endCursor");
+            $queryBuilder = $queryBuilder->andWhere("$this->cursorField <= :endCursor")->setParameter('endCursor', $endCursor);
         }
-        return $this->fetch($queryBuilder);
-    }
-
-    private function fetch(QueryBuilder $queryBuilder): Edges
-    {
-        return Edges::fromRawArray($queryBuilder->execute()->fetchAllAssociative(), $this->cursorField);
+        return Edges::fromRawArray(array_reverse($queryBuilder->execute()->fetchAllAssociative()), $this->cursorField);
     }
 }
