@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Wwwision\RelayPagination\Tests;
 
-use Wwwision\RelayPagination\Connection\Edge;
 use Wwwision\RelayPagination\Loader\ArrayLoader;
+use Wwwision\RelayPagination\Paginator;
 
 final class ArrayPaginatorTest extends AbstractPaginatorTest
 {
@@ -12,8 +12,8 @@ final class ArrayPaginatorTest extends AbstractPaginatorTest
         $this->loader = new ArrayLoader(range('a', 'k'));
     }
 
-    protected function renderEdge(Edge $edge): string
+    protected function renderNode($node): string
     {
-        return (string)$edge->node();
+        return (string)$node;
     }
 }

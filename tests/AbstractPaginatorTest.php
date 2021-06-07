@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Wwwision\RelayPagination\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Wwwision\RelayPagination\Connection\Edge;
 use Wwwision\RelayPagination\Loader\Loader;
 use Wwwision\RelayPagination\Paginator;
 
@@ -32,11 +31,12 @@ abstract class AbstractPaginatorTest extends TestCase
         $nodesPerPage = 3;
         $after = null;
         $actualResult = '';
-        $paginator = new Paginator($this->loader);
+        $paginator = (new Paginator($this->loader))
+            ->withNodeConverter(\Closure::fromCallable([$this, 'renderNode']));
         do {
             $connection = $paginator->first($nodesPerPage, $after);
             foreach ($connection as $edge) {
-                $actualResult .= $this->renderEdge($edge);
+                $actualResult .= $edge->node();
             }
             $after = $connection->pageInfo()->endCursor();
             $actualResult .= '.';
@@ -50,11 +50,13 @@ abstract class AbstractPaginatorTest extends TestCase
         $nodesPerPage = 3;
         $after = null;
         $actualResult = '';
-        $paginator = (new Paginator($this->loader))->reversed();
+        $paginator = (new Paginator($this->loader))
+            ->reversed()
+            ->withNodeConverter(\Closure::fromCallable([$this, 'renderNode']));
         do {
             $connection = $paginator->first($nodesPerPage, $after);
             foreach ($connection as $edge) {
-                $actualResult .= $this->renderEdge($edge);
+                $actualResult .= $edge->node();
             }
             $after = $connection->pageInfo()->endCursor();
             $actualResult .= '.';
@@ -65,7 +67,8 @@ abstract class AbstractPaginatorTest extends TestCase
 
     public function test_forward_pagination_empty_result(): void
     {
-        $paginator = new Paginator($this->loader);
+        $paginator = (new Paginator($this->loader))
+            ->withNodeConverter(\Closure::fromCallable([$this, 'renderNode']));
         $connection = $paginator->first(5, '999');
         self::assertFalse($connection->pageInfo()->hasPreviousPage());
         self::assertFalse($connection->pageInfo()->hasNextPage());
@@ -79,11 +82,12 @@ abstract class AbstractPaginatorTest extends TestCase
         $nodesPerPage = 3;
         $before = null;
         $actualResult = '';
-        $paginator = new Paginator($this->loader);
+        $paginator = (new Paginator($this->loader))
+            ->withNodeConverter(\Closure::fromCallable([$this, 'renderNode']));
         do {
             $connection = $paginator->last($nodesPerPage, $before);
             foreach ($connection as $edge) {
-                $actualResult .= $this->renderEdge($edge);
+                $actualResult .= $edge->node();
             }
             $before = $connection->pageInfo()->endCursor();
             $actualResult .= '.';
@@ -97,11 +101,13 @@ abstract class AbstractPaginatorTest extends TestCase
         $nodesPerPage = 3;
         $before = null;
         $actualResult = '';
-        $paginator = (new Paginator($this->loader))->reversed();
+        $paginator = (new Paginator($this->loader))
+            ->reversed()
+            ->withNodeConverter(\Closure::fromCallable([$this, 'renderNode']));
         do {
             $connection = $paginator->last($nodesPerPage, $before);
             foreach ($connection as $edge) {
-                $actualResult .= $this->renderEdge($edge);
+                $actualResult .= $edge->node();
             }
             $before = $connection->pageInfo()->endCursor();
             $actualResult .= '.';
@@ -112,7 +118,8 @@ abstract class AbstractPaginatorTest extends TestCase
 
     public function test_backward_pagination_empty_result(): void
     {
-        $paginator = new Paginator($this->loader);
+        $paginator = (new Paginator($this->loader))
+            ->withNodeConverter(\Closure::fromCallable([$this, 'renderNode']));
         $connection = $paginator->last(5, '999');
         self::assertFalse($connection->pageInfo()->hasPreviousPage());
         self::assertFalse($connection->pageInfo()->hasNextPage());

@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Wwwision\RelayPagination\Tests;
 
-use Wwwision\RelayPagination\Connection\Edge;
 use Wwwision\RelayPagination\Loader\ArrayLoader;
 use Wwwision\RelayPagination\Loader\CallbackLoader;
 
@@ -17,8 +16,8 @@ final class CallbackLoaderTest extends AbstractLoaderTest
         );
     }
 
-    protected function renderEdge(Edge $edge): string
+    protected function renderNode($node): string
     {
-        return (string)$edge->node();
+        return (string)$node;
     }
 }

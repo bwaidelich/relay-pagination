@@ -4,13 +4,19 @@ namespace Wwwision\RelayPagination\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Wwwision\RelayPagination\Connection\Edge;
+use Wwwision\RelayPagination\Connection\Edges;
 use Wwwision\RelayPagination\Loader\Loader;
 
 abstract class AbstractLoaderTest extends TestCase
 {
     protected ?Loader $loader;
 
-    abstract protected function renderEdge(Edge $edge): string;
+    abstract protected function renderNode($node): string;
+
+    private function renderEdges(Edges $edges): string
+    {
+        return implode('', array_map(fn(Edge $edge) => $edge->node(), $edges->mapNodes(\Closure::fromCallable([$this, 'renderNode']))->toArray()));
+    }
 
     public function data_provider_first(): array
     {
@@ -30,7 +36,7 @@ abstract class AbstractLoaderTest extends TestCase
      */
     public function test_first(int $limit, ?string $startCursor, string $expected): void
     {
-        $actual = implode('', $this->loader->first($limit, $startCursor)->map(fn(Edge $edge) => $this->renderEdge($edge)));
+        $actual = $this->renderEdges($this->loader->first($limit, $startCursor));
         self::assertSame($expected, $actual);
     }
 
@@ -53,7 +59,9 @@ abstract class AbstractLoaderTest extends TestCase
      */
     public function test_last(int $limit, ?string $startCursor, string $expected): void
     {
-        $actual = implode('', $this->loader->last($limit, $startCursor)->map(fn(Edge $edge) => $this->renderEdge($edge)));
+        $actual = $this->renderEdges($this->loader->last($limit, $startCursor));
         self::assertSame($expected, $actual);
     }
+
+
 }

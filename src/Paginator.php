@@ -48,6 +48,18 @@ final class Paginator
         return $newInstance;
     }
 
+    /**
+     * Custom callback to applied to all nodes
+     *
+     * @param \Closure $nodeConverter closure that expects a (mixed type) node and convert it to any other type/form, e.g. fn($node) => json_decode($node, true)
+     */
+    public function withNodeConverter(\Closure $nodeConverter): self
+    {
+        $newInstance = clone $this;
+        $newInstance->nodeConverter = $nodeConverter;
+        return $newInstance;
+    }
+
     public function first(int $numberOfRecords, string $after = null): Connection
     {
         Assert::positiveInteger($numberOfRecords, 'numberOfRecords must be a positive integer');
@@ -92,6 +104,9 @@ final class Paginator
         } else {
             $pageInfo = new PageInfo($hasPreviousPage, $hasNextPage, $edges->startCursor(), $edges->endCursor());
         }
+        if ($this->nodeConverter !== null) {
+            $edges = $edges->mapNodes($this->nodeConverter);
+        }
         return new Connection($pageInfo, $edges);
     }
 
@@ -120,6 +135,9 @@ final class Paginator
             $edges = $edges->reverse();
         } else {
             $pageInfo = new PageInfo($hasPreviousPage, $hasNextPage, $edges->endCursor(), $edges->startCursor());
+        }
+        if ($this->nodeConverter !== null) {
+            $edges = $edges->mapNodes($this->nodeConverter);
         }
         return new Connection($pageInfo, $edges);
     }

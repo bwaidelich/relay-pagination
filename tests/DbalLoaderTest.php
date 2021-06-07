@@ -4,7 +4,6 @@ namespace Wwwision\RelayPagination\Tests;
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Wwwision\RelayPagination\Connection\Edge;
 use Wwwision\RelayPagination\Loader\DbalLoader;
 
 final class DbalLoaderTest extends AbstractLoaderTest
@@ -23,9 +22,9 @@ final class DbalLoaderTest extends AbstractLoaderTest
         $this->loader = new DbalLoader($queryBuilder, 'id');
     }
 
-    protected function renderEdge(Edge $edge): string
+    protected function renderNode($node): string
     {
-        return $edge->node()['value'];
+        return $node['value'];
     }
 
 }

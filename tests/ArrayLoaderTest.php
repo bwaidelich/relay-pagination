@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Wwwision\RelayPagination\Tests;
 
-use Wwwision\RelayPagination\Connection\Edge;
 use Wwwision\RelayPagination\Loader\ArrayLoader;
 
 final class ArrayLoaderTest extends AbstractLoaderTest
@@ -12,9 +11,9 @@ final class ArrayLoaderTest extends AbstractLoaderTest
         $this->loader = new ArrayLoader(range('a', 'i'));
     }
 
-    protected function renderEdge(Edge $edge): string
+    protected function renderNode($node): string
     {
-        return (string)$edge->node();
+        return (string)$node;
     }
 
     public function test_first_throws_exception_for_invalid_cursor(): void

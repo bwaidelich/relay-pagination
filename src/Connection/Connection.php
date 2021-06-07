@@ -29,12 +29,17 @@ final class Connection implements \IteratorAggregate
         return $this->edges;
     }
 
+    public function toNodeArray(): array
+    {
+        return array_map(static fn(Edge $edge) => $edge->node(), $this->toArray());
+    }
+
     /**
      * @return Edge[]
      */
     public function toArray(): array
     {
-        return iterator_to_array($this->edges);
+        return $this->edges->toArray();
     }
 
 }

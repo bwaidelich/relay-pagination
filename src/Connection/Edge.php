@@ -17,6 +17,11 @@ final class Edge
         $this->node = $node;
     }
 
+    public function withNode($node): self
+    {
+        return new self($this->cursor, $node);
+    }
+
     public function cursor(): string
     {
         return $this->cursor;
