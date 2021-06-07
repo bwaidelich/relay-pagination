@@ -57,9 +57,9 @@ final class Edges implements \IteratorAggregate, \Countable
         return new self(\array_slice($this->edges, $offset, $length));
     }
 
-    public function map(callable $callback): array
+    public function map(callable $callback): self
     {
-        return array_map($callback, $this->edges);
+        return new self(array_map($callback, $this->edges));
     }
 
     public function skipLast(): self
