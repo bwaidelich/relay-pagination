@@ -31,8 +31,8 @@ final class Edges implements \IteratorAggregate, \Countable
     {
         $edges = [];
         foreach ($array as $index => $item) {
-            $cursor = $cursorProperty ? $item[$cursorProperty] : (string)$index;
-            $edges[] = new Edge($cursor, $item);
+            $cursor = $cursorProperty ? $item[$cursorProperty] : $index;
+            $edges[] = new Edge((string)$cursor, $item);
         }
         return new self($edges);
     }
