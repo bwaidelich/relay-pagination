@@ -19,14 +19,10 @@ use Wwwision\RelayPagination\Connection\Edges;
  */
 final class DbalLoader implements Loader
 {
-    private QueryBuilder $queryBuilder;
-    private string $cursorField;
-
-    public function __construct(QueryBuilder $queryBuilder, string $cursorField)
-    {
-        $this->queryBuilder = $queryBuilder;
-        $this->cursorField = $cursorField;
-    }
+    public function __construct(
+        private readonly QueryBuilder $queryBuilder,
+        private readonly string $cursorField,
+    ) {}
 
     public function first(int $limit, string $startCursor = null): Edges
     {

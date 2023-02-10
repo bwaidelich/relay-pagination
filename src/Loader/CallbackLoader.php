@@ -19,14 +19,10 @@ use Wwwision\RelayPagination\Connection\Edges;
  */
 final class CallbackLoader implements Loader
 {
-    private \Closure $forwardCallback;
-    private \Closure $backwardCallback;
-
-    public function __construct(\Closure $forwardCallback, \Closure $backwardCallback)
-    {
-        $this->forwardCallback = $forwardCallback;
-        $this->backwardCallback = $backwardCallback;
-    }
+    public function __construct(
+        private readonly \Closure $forwardCallback,
+        private readonly \Closure $backwardCallback,
+    ) {}
 
     public function first(int $limit, string $startCursor = null): Edges
     {

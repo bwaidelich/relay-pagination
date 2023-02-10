@@ -4,17 +4,18 @@ namespace Wwwision\RelayPagination\Connection;
 
 use Webmozart\Assert\Assert;
 
+/**
+ * @implements \IteratorAggregate<Edge>
+ */
 final class Edges implements \IteratorAggregate, \Countable
 {
-    /**
-     * @var Edge[]
-     */
-    private array $edges;
 
-    private function __construct(array $edges)
-    {
-        $this->edges = $edges;
-    }
+    /**
+     * @param Edge[] $edges
+     */
+    private function __construct(
+        private readonly array $edges
+    ) {}
 
     public static function empty(): self
     {
@@ -75,9 +76,9 @@ final class Edges implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @return iterable|Edge[]
+     * @return \Traversable|Edge[]
      */
-    public function getIterator(): iterable
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->edges);
     }

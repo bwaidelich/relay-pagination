@@ -4,18 +4,12 @@ namespace Wwwision\RelayPagination\Connection;
 
 final class PageInfo
 {
-    private bool $hasPreviousPage;
-    private bool $hasNextPage;
-    private string $startCursor;
-    private string $endCursor;
-
-    public function __construct(bool $hasPreviousPage, bool $hasNextPage, string $startCursor, string $endCursor)
-    {
-        $this->hasPreviousPage = $hasPreviousPage;
-        $this->hasNextPage = $hasNextPage;
-        $this->startCursor = $startCursor;
-        $this->endCursor = $endCursor;
-    }
+    public function __construct(
+        private readonly bool $hasPreviousPage,
+        private readonly bool $hasNextPage,
+        private readonly string $startCursor,
+        private readonly string $endCursor,
+    ) {}
 
     public function hasPreviousPage(): bool
     {

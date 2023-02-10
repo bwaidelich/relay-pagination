@@ -4,18 +4,10 @@ namespace Wwwision\RelayPagination\Connection;
 
 final class Edge
 {
-    private string $cursor;
-
-    /**
-     * @var mixed
-     */
-    private $node;
-
-    public function __construct(string $cursor, $node)
-    {
-        $this->cursor = $cursor;
-        $this->node = $node;
-    }
+    public function __construct(
+        private readonly string $cursor,
+        private readonly mixed $node
+    ) {}
 
     public function withNode($node): self
     {
@@ -27,10 +19,7 @@ final class Edge
         return $this->cursor;
     }
 
-    /**
-     * @return mixed
-     */
-    public function node()
+    public function node(): mixed
     {
         return $this->node;
     }

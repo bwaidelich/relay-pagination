@@ -4,14 +4,11 @@ namespace Wwwision\RelayPagination\Connection;
 
 final class Connection implements \IteratorAggregate
 {
-    private PageInfo $pageInfo;
-    private Edges $edges;
 
-    public function __construct(PageInfo $pageInfo, Edges $edges)
-    {
-        $this->pageInfo = $pageInfo;
-        $this->edges = $edges;
-    }
+    public function __construct(
+        private readonly PageInfo $pageInfo,
+        private readonly Edges $edges
+    ) {}
 
     public static function forEmptyResult(): self
     {
