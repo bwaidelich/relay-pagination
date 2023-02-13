@@ -18,7 +18,7 @@
     },
     "suggest": {
         "doctrine/dbal": "To make use of the DbalLoader",
-        "doctrine/orm": "To make use of the OrmLoader",
+        "doctrine/orm": "To make use of the OrmLoader"
     },
     "autoload": {
         "psr-4": {
@@ -29,5 +29,15 @@
         "psr-4": {
             "Wwwision\\RelayPagination\\Tests\\": "tests/"
         }
-    }
+    },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/bwaidelich"
+        },
+        {
+            "type": "paypal",
+            "url": "https://www.paypal.me/bwaidelich"
+        }
+    ]
 }
