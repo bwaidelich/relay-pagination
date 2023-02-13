@@ -31,7 +31,12 @@ final class DbalLoader implements Loader
             ->orderBy($this->cursorField, 'ASC')
             ->setMaxResults($limit);
         if ($startCursor !== null) {
-            $queryBuilder = $queryBuilder->andHaving("$this->cursorField >= :startCursor")->setParameter('startCursor', $startCursor);
+            if ($queryBuilder->getQueryPart('groupBy') === []) {
+                $queryBuilder = $queryBuilder->andWhere("$this->cursorField >= :startCursor");
+            } else {
+                $queryBuilder = $queryBuilder->andHaving("$this->cursorField >= :startCursor");
+            }
+            $queryBuilder->setParameter('startCursor', $startCursor);
         }
         return Edges::fromRawArray($queryBuilder->execute()->fetchAllAssociative(), $this->cursorField);
     }
@@ -43,7 +48,12 @@ final class DbalLoader implements Loader
             ->orderBy($this->cursorField, 'DESC')
             ->setMaxResults($limit);
         if ($endCursor !== null) {
-            $queryBuilder = $queryBuilder->andHaving("$this->cursorField <= :endCursor")->setParameter('endCursor', $endCursor);
+            if ($queryBuilder->getQueryPart('groupBy') === []) {
+                $queryBuilder = $queryBuilder->andWhere("$this->cursorField <= :endCursor");
+            } else {
+                $queryBuilder = $queryBuilder->andHaving("$this->cursorField <= :endCursor");
+            }
+            $queryBuilder->setParameter('endCursor', $endCursor);
         }
         return Edges::fromRawArray(array_reverse($queryBuilder->execute()->fetchAllAssociative()), $this->cursorField);
     }
