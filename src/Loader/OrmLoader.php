@@ -24,30 +24,61 @@ final class OrmLoader implements Loader
     public function __construct(
         private readonly QueryBuilder $queryBuilder,
         private readonly string $cursorPropertyName,
-        private readonly \Closure $cursorGetter
     ) {}
 
     public function first(int $limit, string $startCursor = null): Edges
     {
         $queryBuilder = clone $this->queryBuilder;
+        $rootAlias = $queryBuilder->getRootAliases()[0];
         $queryBuilder
-            ->orderBy($this->cursorPropertyName, 'ASC')
+            ->orderBy("$rootAlias.$this->cursorPropertyName", 'ASC')
             ->setMaxResults($limit);
         if ($startCursor !== null) {
-            $queryBuilder = $queryBuilder->andHaving("$this->cursorPropertyName >= :startCursor")->setParameter('startCursor', $startCursor);
+            if ($queryBuilder->getDQLPart('groupBy') === []) {
+                $queryBuilder = $queryBuilder->andWhere("$rootAlias.$this->cursorPropertyName >= :startCursor");
+            } else {
+                $queryBuilder = $queryBuilder->andHaving("$rootAlias.$this->cursorPropertyName >= :startCursor");
+            }
+            $queryBuilder->setParameter('startCursor', $startCursor);
         }
-        return Edges::fromArray(array_map(fn ($node) => new Edge(($this->cursorGetter)($node), $node), $queryBuilder->getQuery()->execute()));
+        return Edges::fromArray(array_map(fn ($node) => new Edge($this->getCursorValue($node), $node), $queryBuilder->getQuery()->execute()));
     }
 
     public function last(int $limit, string $endCursor = null): Edges
     {
         $queryBuilder = clone $this->queryBuilder;
+        $rootAlias = $queryBuilder->getRootAliases()[0];
         $queryBuilder
-            ->orderBy($this->cursorPropertyName, 'DESC')
+            ->orderBy("$rootAlias.$this->cursorPropertyName", 'DESC')
             ->setMaxResults($limit);
         if ($endCursor !== null) {
-            $queryBuilder = $queryBuilder->andHaving("$this->cursorPropertyName <= :endCursor")->setParameter('endCursor', $endCursor);
+            if ($queryBuilder->getDQLPart('groupBy') === []) {
+                $queryBuilder = $queryBuilder->andWhere("$rootAlias.$this->cursorPropertyName <= :endCursor");
+            } else {
+                $queryBuilder = $queryBuilder->andHaving("$rootAlias.$this->cursorPropertyName <= :endCursor");
+            }
+            $queryBuilder->setParameter('endCursor', $endCursor);
         }
-        return Edges::fromArray(array_reverse(array_map(fn ($node) => new Edge(($this->cursorGetter)($node), $node), $queryBuilder->getQuery()->execute())));
+        return Edges::fromArray(array_reverse(array_map(fn ($node) => new Edge($this->getCursorValue($node), $node), $queryBuilder->getQuery()->execute())));
+    }
+
+    private function getCursorValue($subject): string|null
+    {
+        if (is_array($subject)) {
+            return $subject[$this->cursorPropertyName] ?? null;
+        }
+        if (!is_object($subject)) {
+            return null;
+        }
+        if (array_key_exists($this->cursorPropertyName, get_object_vars($subject))) {
+            return (string)$subject->{$this->cursorPropertyName};
+        }
+        $getterMethodName = 'get' . ucfirst($this->cursorPropertyName);
+        if (is_callable([$subject, $getterMethodName])) {
+            return (string)$subject->{$getterMethodName}();
+        }
+        if (($subject instanceof \ArrayAccess) && !($subject instanceof \SplObjectStorage) && $subject->offsetExists($this->cursorPropertyName)) {
+            return $subject->offsetGet($this->cursorPropertyName);
+        }
     }
 }
