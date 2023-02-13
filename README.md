@@ -71,7 +71,7 @@ Assert::false($page2->pageInfo()->hasNextPage());
 
 ## Loaders
 
-This package comes with three adapters (aka "loaders"):
+This package comes with four adapters (aka "loaders"):
 
 ### ArrayLoader
 
@@ -116,6 +116,22 @@ $queryBuilder = (new QueryBuilder($dbalConnection))
 $dbalLoader = new DbalLoader($queryBuilder, 'id');
 ```
 
+### OrmLoader
+
+The `OrmLoader` allows to paginate arbitrary Doctrine ORM results.
+**Note:** This loader requires the `doctrine/orm` package to be installed:
+
+    composer require doctrine/orm
+
+#### Usage
+
+```php
+$queryBuilder = $entityManager->createQueryBuilder()
+    ->select('e')
+    ->from(SomeEntity::class, 'e');
+$ormLoader = new OrmLoader($queryBuilder, 'id');
+```
+
 ## Convert nodes
 
 A `node` is the only untyped property in this package since the loaders define the structure & type of nodes.
@@ -138,4 +154,4 @@ $paginator = (new Paginator($dbalLoader))
 
 ## Examples
 
-See [examples](examples) folder
+See [examples](examples) and [tests](tests) folders

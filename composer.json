@@ -17,7 +17,8 @@
         "phpunit/phpunit": "^9"
     },
     "suggest": {
-        "doctrine/dbal": "To make use of the DbalLoader"
+        "doctrine/dbal": "To make use of the DbalLoader",
+        "doctrine/orm": "To make use of the OrmLoader",
     },
     "autoload": {
         "psr-4": {
