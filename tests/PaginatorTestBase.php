@@ -36,11 +36,11 @@ abstract class PaginatorTestBase extends TestCase
         do {
             $connection = $paginator->first($nodesPerPage, $after);
             foreach ($connection as $edge) {
-                $actualResult .= $edge->node();
+                $actualResult .= $edge->node;
             }
-            $after = $connection->pageInfo()->endCursor();
+            $after = $connection->pageInfo->endCursor;
             $actualResult .= '.';
-        } while ($connection->pageInfo()->hasNextPage());
+        } while ($connection->pageInfo->hasNextPage);
 
         self::assertSame('abc.def.ghi.jk.', $actualResult);
     }
@@ -52,15 +52,15 @@ abstract class PaginatorTestBase extends TestCase
         $actualResult = '';
         $paginator = (new Paginator($this->loader))
             ->reversed()
-            ->withNodeConverter(\Closure::fromCallable([$this, 'renderNode']));
+            ->withNodeConverter($this->renderNode(...));
         do {
             $connection = $paginator->first($nodesPerPage, $after);
             foreach ($connection as $edge) {
-                $actualResult .= $edge->node();
+                $actualResult .= $edge->node;
             }
-            $after = $connection->pageInfo()->endCursor();
+            $after = $connection->pageInfo->endCursor;
             $actualResult .= '.';
-        } while ($connection->pageInfo()->hasNextPage());
+        } while ($connection->pageInfo->hasNextPage);
 
         self::assertSame('kji.hgf.edc.ba.', $actualResult);
     }
@@ -68,12 +68,12 @@ abstract class PaginatorTestBase extends TestCase
     public function test_forward_pagination_empty_result(): void
     {
         $paginator = (new Paginator($this->loader))
-            ->withNodeConverter(\Closure::fromCallable([$this, 'renderNode']));
+            ->withNodeConverter($this->renderNode(...));
         $connection = $paginator->first(5, '999');
-        self::assertFalse($connection->pageInfo()->hasPreviousPage());
-        self::assertFalse($connection->pageInfo()->hasNextPage());
-        self::assertSame('', $connection->pageInfo()->startCursor());
-        self::assertSame('', $connection->pageInfo()->endCursor());
+        self::assertFalse($connection->pageInfo->hasPreviousPage);
+        self::assertFalse($connection->pageInfo->hasNextPage);
+        self::assertSame('', $connection->pageInfo->startCursor);
+        self::assertSame('', $connection->pageInfo->endCursor);
         self::assertEmpty($connection->getIterator());
     }
 
@@ -83,15 +83,15 @@ abstract class PaginatorTestBase extends TestCase
         $before = null;
         $actualResult = '';
         $paginator = (new Paginator($this->loader))
-            ->withNodeConverter(\Closure::fromCallable([$this, 'renderNode']));
+            ->withNodeConverter($this->renderNode(...));
         do {
             $connection = $paginator->last($nodesPerPage, $before);
             foreach ($connection as $edge) {
-                $actualResult .= $edge->node();
+                $actualResult .= $edge->node;
             }
-            $before = $connection->pageInfo()->endCursor();
+            $before = $connection->pageInfo->endCursor;
             $actualResult .= '.';
-        } while ($connection->pageInfo()->hasPreviousPage());
+        } while ($connection->pageInfo->hasPreviousPage);
 
         self::assertSame('ijk.fgh.cde.ab.', $actualResult);
     }
@@ -103,15 +103,15 @@ abstract class PaginatorTestBase extends TestCase
         $actualResult = '';
         $paginator = (new Paginator($this->loader))
             ->reversed()
-            ->withNodeConverter(\Closure::fromCallable([$this, 'renderNode']));
+            ->withNodeConverter($this->renderNode(...));
         do {
             $connection = $paginator->last($nodesPerPage, $before);
             foreach ($connection as $edge) {
-                $actualResult .= $edge->node();
+                $actualResult .= $edge->node;
             }
-            $before = $connection->pageInfo()->endCursor();
+            $before = $connection->pageInfo->endCursor;
             $actualResult .= '.';
-        } while ($connection->pageInfo()->hasPreviousPage());
+        } while ($connection->pageInfo->hasPreviousPage);
 
         self::assertSame('cba.fed.ihg.kj.', $actualResult);
     }
@@ -119,12 +119,12 @@ abstract class PaginatorTestBase extends TestCase
     public function test_backward_pagination_empty_result(): void
     {
         $paginator = (new Paginator($this->loader))
-            ->withNodeConverter(\Closure::fromCallable([$this, 'renderNode']));
+            ->withNodeConverter($this->renderNode(...));
         $connection = $paginator->last(5, '999');
-        self::assertFalse($connection->pageInfo()->hasPreviousPage());
-        self::assertFalse($connection->pageInfo()->hasNextPage());
-        self::assertSame('', $connection->pageInfo()->startCursor());
-        self::assertSame('', $connection->pageInfo()->endCursor());
+        self::assertFalse($connection->pageInfo->hasPreviousPage);
+        self::assertFalse($connection->pageInfo->hasNextPage);
+        self::assertSame('', $connection->pageInfo->startCursor);
+        self::assertSame('', $connection->pageInfo->endCursor);
         self::assertEmpty($connection->getIterator());
     }
 }

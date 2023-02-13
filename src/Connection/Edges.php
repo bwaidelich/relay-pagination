@@ -65,7 +65,7 @@ final class Edges implements \IteratorAggregate, \Countable
 
     public function mapNodes(callable $callback): self
     {
-        return new self(array_map(static fn(Edge $edge) => $edge->withNode($callback($edge->node())), $this->edges));
+        return new self(array_map(static fn(Edge $edge) => $edge->withNode($callback($edge->node)), $this->edges));
     }
 
     public function skipLast(): self
@@ -85,12 +85,12 @@ final class Edges implements \IteratorAggregate, \Countable
 
     public function endCursor(): string
     {
-        return $this->edges[array_key_last($this->edges)]->cursor();
+        return $this->edges[array_key_last($this->edges)]->cursor;
     }
 
     public function startCursor(): string
     {
-        return $this->edges[array_key_first($this->edges)]->cursor();
+        return $this->edges[array_key_first($this->edges)]->cursor;
     }
 
     public function count(): int

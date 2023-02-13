@@ -6,8 +6,8 @@ final class Connection implements \IteratorAggregate
 {
 
     public function __construct(
-        private readonly PageInfo $pageInfo,
-        private readonly Edges $edges
+        public readonly PageInfo $pageInfo,
+        public readonly Edges $edges
     ) {}
 
     public static function forEmptyResult(): self
@@ -16,6 +16,9 @@ final class Connection implements \IteratorAggregate
         return new self($pageInfo, Edges::empty());
     }
 
+    /**
+     * @deprecated with 1.2 - use public property `Connection::pageInfo` instead
+     */
     public function pageInfo(): PageInfo
     {
         return $this->pageInfo;
@@ -28,7 +31,7 @@ final class Connection implements \IteratorAggregate
 
     public function toNodeArray(): array
     {
-        return array_map(static fn(Edge $edge) => $edge->node(), $this->toArray());
+        return array_map(static fn(Edge $edge) => $edge->node, $this->toArray());
     }
 
     /**

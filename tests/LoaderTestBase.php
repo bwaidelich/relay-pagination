@@ -15,7 +15,7 @@ abstract class LoaderTestBase extends TestCase
 
     private function renderEdges(Edges $edges): string
     {
-        return implode('', array_map(fn(Edge $edge) => $edge->node(), $edges->mapNodes(\Closure::fromCallable([$this, 'renderNode']))->toArray()));
+        return implode('', array_map(static fn(Edge $edge) => $edge->node, $edges->mapNodes($this->renderNode(...))->toArray()));
     }
 
     public static function data_provider_first(): array

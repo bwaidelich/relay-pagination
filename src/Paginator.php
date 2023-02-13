@@ -15,11 +15,11 @@ use Wwwision\RelayPagination\Loader\Loader;
  * $paginator = new Paginator($loader);
  * $firstPage = $paginator->first(10);
  * foreach ($firstPage as $edge) {
- *   // $edge->cursor()
- *   // $edge->node();
+ *   // $edge->cursor;
+ *   // $edge->node;
  * }
- * if ($firstPage->pageInfo()->hasNextPage()) {
- *   $secondPage = $paginator->first(10, $firstPage->pageInfo()->endCursor());
+ * if ($firstPage->pageInfo->hasNextPage) {
+ *   $secondPage = $paginator->first(10, $firstPage->pageInfo->endCursor);
  * }
  * // ...
  *

@@ -18,11 +18,11 @@ $paginator = new Paginator($loader);
 $firstPage = $paginator->first($resultsPerPage);
 
 foreach ($firstPage as $edge) {
-    // $edge->cursor(); contains the cursor string
-    // $edge->node(); contains the payload
+    // $edge->cursor; contains the cursor string
+    // $edge->node; contains the payload
 }
 
-// $firstPage->pageInfo(); contains an object with pagination information
+// $firstPage->pageInfo; contains an object with pagination information
 ```
 
 ### Next page(s)
@@ -31,8 +31,8 @@ Every `connection` contains information about next and previous pages.
 To navigate to a succeeding page, you can use the `endCursor` of the previous connection as input for the `after` argument:
 
 ```php
-if ($firstPage->pageInfo()->hasNextPage()) {
-  $secondPage = $paginator->first($resultsPerPage, $firstPage->pageInfo()->endCursor());
+if ($firstPage->pageInfo->hasNextPage) {
+  $secondPage = $paginator->first($resultsPerPage, $firstPage->pageInfo->endCursor);
   // ...
 }
 ```
@@ -42,8 +42,8 @@ if ($firstPage->pageInfo()->hasNextPage()) {
 To navigate to a _preceeding_ page, the `startCursor` can be passed to the `last()` method likewise:
 
 ```php
-if ($secondPage->pageInfo()->hasPreviousPage()) {
-  $firstPage = $paginator->last($resultsPerPage, $secondPage->pageInfo()->startCursor());
+if ($secondPage->pageInfo->hasPreviousPage) {
+  $firstPage = $paginator->last($resultsPerPage, $secondPage->pageInfo->startCursor);
   // ...
 }
 ```
@@ -59,14 +59,14 @@ $paginator = (new Paginator($loader))->reversed();
 
 $page1 = $paginator->first(3);
 
-Assert::same(['e', 'd', 'c'], array_map(fn($edge) => $edge->node(), $page1->toArray()));
-Assert::false($page1->pageInfo()->hasPreviousPage());
-Assert::true($page1->pageInfo()->hasNextPage());
+Assert::same(['e', 'd', 'c'], array_map(fn($edge) => $edge->node, $page1->toArray()));
+Assert::false($page1->pageInfo->hasPreviousPage);
+Assert::true($page1->pageInfo->hasNextPage);
 
-$page2 = $paginator->first(3, $page1->pageInfo()->endCursor());
-Assert::same(['b', 'a'], array_map(fn($edge) => $edge->node(), $page2->toArray()));
-Assert::true($page2->pageInfo()->hasPreviousPage());
-Assert::false($page2->pageInfo()->hasNextPage());
+$page2 = $paginator->first(3, $page1->pageInfo->endCursor);
+Assert::same(['b', 'a'], array_map(fn($edge) => $edge->node, $page2->toArray()));
+Assert::true($page2->pageInfo->hasPreviousPage);
+Assert::false($page2->pageInfo->hasNextPage);
 ```
 
 ## Loaders

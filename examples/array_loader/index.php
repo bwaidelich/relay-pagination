@@ -15,13 +15,13 @@ if (isset($_GET['before'])) {
 }
 
 echo '<ul>';
-if ($connection->pageInfo()->hasPreviousPage()) {
-    echo '<li><a href="./?before=' . $connection->pageInfo()->startCursor() . '">&lt;</a></li>';
+if ($connection->pageInfo->hasPreviousPage) {
+    echo '<li><a href="./?before=' . $connection->pageInfo->startCursor . '">&lt;</a></li>';
 }
 foreach ($connection as $edge) {
-    echo "<li>{$edge->node()}</li>";
+    echo "<li>{$edge->node}</li>";
 }
-if ($connection->pageInfo()->hasNextPage()) {
-    echo '<li><a href="./?after=' . $connection->pageInfo()->endCursor() . '">&gt;</a></li>';
+if ($connection->pageInfo->hasNextPage) {
+    echo '<li><a href="./?after=' . $connection->pageInfo->endCursor . '">&gt;</a></li>';
 }
 echo '</ul>';
