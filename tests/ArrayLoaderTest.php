@@ -4,7 +4,7 @@ namespace Wwwision\RelayPagination\Tests;
 
 use Wwwision\RelayPagination\Loader\ArrayLoader;
 
-final class ArrayLoaderTest extends AbstractLoaderTest
+final class ArrayLoaderTest extends LoaderTestBase
 {
     public function setUp(): void
     {

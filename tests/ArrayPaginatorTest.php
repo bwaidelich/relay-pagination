@@ -5,7 +5,7 @@ namespace Wwwision\RelayPagination\Tests;
 use Wwwision\RelayPagination\Loader\ArrayLoader;
 use Wwwision\RelayPagination\Paginator;
 
-final class ArrayPaginatorTest extends AbstractPaginatorTest
+final class ArrayPaginatorTest extends PaginatorTestBase
 {
     public function setUp(): void
     {

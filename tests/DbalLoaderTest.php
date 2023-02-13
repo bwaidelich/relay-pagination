@@ -6,7 +6,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Wwwision\RelayPagination\Loader\DbalLoader;
 
-final class DbalLoaderTest extends AbstractLoaderTest
+final class DbalLoaderTest extends LoaderTestBase
 {
     public function setUp(): void
     {
