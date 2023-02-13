@@ -6,7 +6,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Wwwision\RelayPagination\Loader\DbalLoader;
 
-final class DbalPaginatorTest extends AbstractPaginatorTest
+final class DbalPaginatorTest extends PaginatorTestBase
 {
     public function setUp(): void
     {

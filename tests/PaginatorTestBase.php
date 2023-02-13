@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Wwwision\RelayPagination\Loader\Loader;
 use Wwwision\RelayPagination\Paginator;
 
-abstract class AbstractPaginatorTest extends TestCase
+abstract class PaginatorTestBase extends TestCase
 {
     protected ?Loader $loader;
 
@@ -32,7 +32,7 @@ abstract class AbstractPaginatorTest extends TestCase
         $after = null;
         $actualResult = '';
         $paginator = (new Paginator($this->loader))
-            ->withNodeConverter(\Closure::fromCallable([$this, 'renderNode']));
+            ->withNodeConverter($this->renderNode(...));
         do {
             $connection = $paginator->first($nodesPerPage, $after);
             foreach ($connection as $edge) {

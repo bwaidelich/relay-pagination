@@ -7,7 +7,7 @@ use Wwwision\RelayPagination\Connection\Edge;
 use Wwwision\RelayPagination\Connection\Edges;
 use Wwwision\RelayPagination\Loader\Loader;
 
-abstract class AbstractLoaderTest extends TestCase
+abstract class LoaderTestBase extends TestCase
 {
     protected ?Loader $loader;
 
@@ -18,7 +18,7 @@ abstract class AbstractLoaderTest extends TestCase
         return implode('', array_map(fn(Edge $edge) => $edge->node(), $edges->mapNodes(\Closure::fromCallable([$this, 'renderNode']))->toArray()));
     }
 
-    public function data_provider_first(): array
+    public static function data_provider_first(): array
     {
         return [
             ['limit' => 3, 'start_cursor' => null, 'expected' => 'abc'],
@@ -40,7 +40,7 @@ abstract class AbstractLoaderTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function data_provider_last(): array
+    public static function data_provider_last(): array
     {
         return [
             ['limit' => 3, 'end_cursor' => null, 'expected' => 'ghi'],
